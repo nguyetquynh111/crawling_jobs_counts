@@ -1,6 +1,3 @@
-#!/Users/quynhnguyen/Downloads/miniconda3/envs/quynhng/bin/python
-# -*- coding: utf-8 -*-
-
 import os
 import re
 import threading
@@ -578,6 +575,8 @@ class JobITnaviCounting(object):
 
     def itnavi_jobs(self, page_num, link):
         url = link + f'''?page={page_num}'''
+        self.driver.switch_to.default_content()
+        time.sleep(request_delay)
         self.driver.get(url)
         results = self.driver.page_source
         time.sleep(request_delay)
@@ -606,7 +605,7 @@ class JobITnaviCounting(object):
         urls = {'Ho Chi Minh': 'https://itnavi.com.vn/job/ho-chi-minh',
                 'Ha Noi': 'https://itnavi.com.vn/job/ha-noi', 'Da Nang': 'https://itnavi.com.vn/job/da-nang'}
         itnavi = []
-        for key, value in urls.items():
+        for key, value in tqdm(urls.items()):
 
             page = 0
             result = []
@@ -630,8 +629,7 @@ class JobITnaviCounting(object):
 
 
 if __name__ == "__main__":
-    current_path = "/Users/quynhnguyen/Downloads/crawling"
-    current_path = os.path.join(current_path,  "careerbuilder")
+    current_path = "careerbuilder"
     os.chdir(current_path)
     df_temp = pd.DataFrame(columns=['source', 'all_jobs', 'jobs_posted_in_7_days', 'companies',
                                     'companies_posted_jobs_in_7_days', 'updated_date', 'last_update', 'string_date'], index=range(8))
@@ -645,31 +643,31 @@ if __name__ == "__main__":
     Job_Itnavi = JobITnaviCounting()
     Job_Topdev = JobTopDevCounting()
 
-    # t1 = threading.Thread(target=Job_Vnw_Counting.count_vnw)
-    # t2 = threading.Thread(target=Job_Itviec_Counting.count_itviec)
-    # t3 = threading.Thread(target=Job_CB.count_companies)
-    # t4 = threading.Thread(target=Job_Topcv.count_topcv)
-    # t5 = threading.Thread(target=Job_Linkedin.count_linkedin)
-    # t6 = threading.Thread(target=Job_Glints.glints_count)
-    # t7 = threading.Thread(target=Job_Topdev.top_dev_crawling)
+    t1 = threading.Thread(target=Job_Vnw_Counting.count_vnw)
+    t2 = threading.Thread(target=Job_Itviec_Counting.count_itviec)
+    t3 = threading.Thread(target=Job_CB.count_companies)
+    t4 = threading.Thread(target=Job_Topcv.count_topcv)
+    t5 = threading.Thread(target=Job_Linkedin.count_linkedin)
+    t6 = threading.Thread(target=Job_Glints.glints_count)
+    t7 = threading.Thread(target=Job_Topdev.top_dev_crawling)
     t8 = threading.Thread(target=Job_Itnavi.itnavi_crawling)
 
-    # t1.start()
-    # t2.start()
-    # t3.start()
-    # t4.start()
-    # t5.start()
-    # t6.start()
-    # t7.start()
+    t1.start()
+    t2.start()
+    t3.start()
+    t4.start()
+    t5.start()
+    t6.start()
+    t7.start()
     t8.start()
 
-    # t1.join()
-    # t2.join()
-    # t3.join()
-    # t4.join()
-    # t5.join()
-    # t6.join()
-    # t7.join()
+    t1.join()
+    t2.join()
+    t3.join()
+    t4.join()
+    t5.join()
+    t6.join()
+    t7.join()
     t8.join()
 
     os.chdir("Results")
