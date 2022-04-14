@@ -20,7 +20,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from tqdm import tqdm
 from webdriver_manager.chrome import ChromeDriverManager
 
-TODAY = datetime.today().date() - timedelta(days=1)
+TODAY = datetime.today().date()
 
 request_delay = 5
 
@@ -514,6 +514,8 @@ class JobTopDevCounting(object):
                 }}
             ).then(res => res.text());
         """
+        self.driver.switch_to.default_content()
+        time.sleep(request_delay)
         results = self.driver.execute_script(script)
         time.sleep(request_delay)
 
@@ -543,7 +545,7 @@ class JobTopDevCounting(object):
         urls = {'Ho Chi Minh': 'https://topdev.vn/viec-lam-it/ho-chi-minh-kl79',
                 'Ha Noi': 'https://topdev.vn/viec-lam-it/ha-noi-kl01', 'Da Nang': 'https://topdev.vn/viec-lam-it/da-nang-kl48'}
         top_dev = []
-        for key, value in urls.items():
+        for key, value in tqdm(urls.items()):
 
             self.driver.get(value)
             page = 0
@@ -643,32 +645,32 @@ if __name__ == "__main__":
     Job_Itnavi = JobITnaviCounting()
     Job_Topdev = JobTopDevCounting()
 
-    t1 = threading.Thread(target=Job_Vnw_Counting.count_vnw)
-    t2 = threading.Thread(target=Job_Itviec_Counting.count_itviec)
-    t3 = threading.Thread(target=Job_CB.count_companies)
-    t4 = threading.Thread(target=Job_Topcv.count_topcv)
-    t5 = threading.Thread(target=Job_Linkedin.count_linkedin)
-    t6 = threading.Thread(target=Job_Glints.glints_count)
+    # t1 = threading.Thread(target=Job_Vnw_Counting.count_vnw)
+    # t2 = threading.Thread(target=Job_Itviec_Counting.count_itviec)
+    # t3 = threading.Thread(target=Job_CB.count_companies)
+    # t4 = threading.Thread(target=Job_Topcv.count_topcv)
+    # t5 = threading.Thread(target=Job_Linkedin.count_linkedin)
+    # t6 = threading.Thread(target=Job_Glints.glints_count)
     t7 = threading.Thread(target=Job_Topdev.top_dev_crawling)
-    t8 = threading.Thread(target=Job_Itnavi.itnavi_crawling)
+    # t8 = threading.Thread(target=Job_Itnavi.itnavi_crawling)
 
-    t1.start()
-    t2.start()
-    t3.start()
-    t4.start()
-    t5.start()
-    t6.start()
+    # t1.start()
+    # t2.start()
+    # t3.start()
+    # t4.start()
+    # t5.start()
+    # t6.start()
     t7.start()
-    t8.start()
+    # t8.start()
 
-    t1.join()
-    t2.join()
-    t3.join()
-    t4.join()
-    t5.join()
-    t6.join()
+    # t1.join()
+    # t2.join()
+    # t3.join()
+    # t4.join()
+    # t5.join()
+    # t6.join()
     t7.join()
-    t8.join()
+    # t8.join()
 
     os.chdir("Results")
 
