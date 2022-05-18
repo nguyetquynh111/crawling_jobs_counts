@@ -49,10 +49,10 @@ class CareerBuilderSearch(scrapy.Spider):
     name = 'full_careerbuilder'
     allowed_domain = ["careerbuilder.vn"]
     custom_settings = {
-        "CONCURRENT_REQUESTS": 3,
-        "CONCURRENT_REQUESTS_PER_DOMAIN": 3,
-        "CONCURRENT_REQUESTS_PER_IP": 3,
-        "DOWNLOAD_DELAY": 1,
+        "CONCURRENT_REQUESTS": 1,
+        "CONCURRENT_REQUESTS_PER_DOMAIN": 1,
+        "CONCURRENT_REQUESTS_PER_IP": 1,
+        "DOWNLOAD_DELAY": 3,
     }
 
     def start_requests(self):

@@ -20,7 +20,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from tqdm import tqdm
 from webdriver_manager.chrome import ChromeDriverManager
 
-TODAY = datetime.today().date()
+TODAY = datetime.today().date() 
 
 request_delay = 5
 
@@ -567,7 +567,7 @@ class JobTopDevCounting(object):
         j_7 = [top_dev_df[top_dev_df['time'].str.contains('(?:hour|minute|day|hour|second)', regex=True)]['link_job'].nunique()][0]
         c = [top_dev_df['company_name'].nunique()][0]
         c_7 = [top_dev_df[top_dev_df['time'].str.contains('(?:hour|minute|day|hour|second)', regex=True)]['company_name'].nunique()][0]
-
+        self.driver.close()
         df_temp.iloc[6] = ["TopDev", j, j_7, c, c_7, TODAY, 0, str(TODAY)]
 
 class JobITnaviCounting(object):
@@ -627,6 +627,7 @@ class JobITnaviCounting(object):
         c_7 = [itnavi_df[itnavi_df['time'].isin(['0 d', '1 d', '2 d', '3 d', '4 d', '5 d', '6 d'])]['company_name'].nunique()][0]
 
         df_temp.iloc[7] = ["ITNavi", j, j_7, c, c_7, TODAY, 0, str(TODAY)]
+        self.driver.close()
         return result
 
 
@@ -645,32 +646,33 @@ if __name__ == "__main__":
     Job_Itnavi = JobITnaviCounting()
     Job_Topdev = JobTopDevCounting()
 
-    # t1 = threading.Thread(target=Job_Vnw_Counting.count_vnw)
-    # t2 = threading.Thread(target=Job_Itviec_Counting.count_itviec)
-    # t3 = threading.Thread(target=Job_CB.count_companies)
-    # t4 = threading.Thread(target=Job_Topcv.count_topcv)
-    # t5 = threading.Thread(target=Job_Linkedin.count_linkedin)
-    # t6 = threading.Thread(target=Job_Glints.glints_count)
+    t1 = threading.Thread(target=Job_Vnw_Counting.count_vnw)
+    t2 = threading.Thread(target=Job_Itviec_Counting.count_itviec)
+    t3 = threading.Thread(target=Job_CB.count_companies)
+    t4 = threading.Thread(target=Job_Topcv.count_topcv)
+    t5 = threading.Thread(target=Job_Linkedin.count_linkedin)
+    t6 = threading.Thread(target=Job_Glints.glints_count)
     t7 = threading.Thread(target=Job_Topdev.top_dev_crawling)
-    # t8 = threading.Thread(target=Job_Itnavi.itnavi_crawling)
+    t8 = threading.Thread(target=Job_Itnavi.itnavi_crawling)
 
-    # t1.start()
-    # t2.start()
-    # t3.start()
-    # t4.start()
-    # t5.start()
-    # t6.start()
+
+    t1.start()
+    t2.start()
+    t3.start()
+    t4.start()
+    t5.start()
+    t6.start()
     t7.start()
-    # t8.start()
+    t8.start()
 
-    # t1.join()
-    # t2.join()
-    # t3.join()
-    # t4.join()
-    # t5.join()
-    # t6.join()
+    t1.join()
+    t2.join()
+    t3.join()
+    t4.join()
+    t5.join()
+    t6.join()
     t7.join()
-    # t8.join()
+    t8.join()
 
     os.chdir("Results")
 
@@ -679,7 +681,6 @@ if __name__ == "__main__":
     else:
         df = pd.read_csv("company_job_counts.csv")
     df.to_csv("old_dateframe.csv", index=False)
-    df_temp = df_temp.dropna()
 
     new_last_update = df[df["string_date"]
                          == str(TODAY)]["last_update"].values
@@ -688,6 +689,7 @@ if __name__ == "__main__":
 
     df_temp["last_update"] = [1]*len(df_temp)
     df_temp["updated_date"] = [datetime.now()]*len(df_temp)
+    df_temp = df_temp.dropna(axis=1, how='all')
     df = pd.concat([df, df_temp])
     df.to_csv("company_job_counts.csv", index=False)
     df_temp.to_csv("today.csv", index=False)

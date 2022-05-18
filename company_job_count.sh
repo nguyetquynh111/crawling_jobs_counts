@@ -1,3 +1,3 @@
 source activate quynhng
-cd crawling
+cd Downloads/crawling_job_counts
 python company_job_count.py
